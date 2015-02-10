@@ -1,7 +1,7 @@
 {
     "name":"irontec/klear-starter",
     "description":"",
-    "repositories": [
+    "repositories":[
         {
             "type":"vcs",
             "url":"https://github.com/irontec/klear"
@@ -27,14 +27,15 @@
         "irontec/klear":"@dev",
         "irontec/klearMatrix":"@dev",
         "irontec/klearGallery":"@dev",
-        "irontec/Iron": "@dev"
+        "irontec/Iron":"@dev"
     },
     "require-dev":{
         "irontec/Generator":"@dev"
     },
     "scripts":{
-        "post-create-project-cmd" : [
-            "php cli/install.php"
+        "post-create-project-cmd":[
+            "php cli/install.php",
+            "php vendor/irontec/Generator/klear-models-mappers-generator.php -a application"
         ]
     }
 }
