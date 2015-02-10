@@ -36,11 +36,14 @@ $application = str_replace('{host}', $host, $application);
 
 file_put_contents('./application/configs/application.ini', $application);
 
-$mysqli = new mysqli($host, $username, $password, $dbname);
+mysqli_report(MYSQLI_REPORT_STRICT);
 
-if ($mysqli->connect_errno) {
-    echo "Fallo al contenctar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-    return false;
+try {
+    $mysqli = new mysqli($host, $username, $password, $dbname);
+
+} catch (Exception $e) {
+    echo "Fallo al contenctar a MySQL \n";
+    exit(1);
 }
 
 $klearUsers = "
@@ -65,6 +68,6 @@ if ($mysqli->query($klearUsers)) {
     echo "Fallo la creación de KlearUsers \n";
 }
 
-
-
-
+exec('php ' . __DIR__ . '/vendor/irontec/Generator/klear-models-mappers-generator.php -a ' . __DIR__ . '/application');
+exec('php ' . __DIR__ . '/vendor/irontec/Generator/klear-db-generator.php -a ' . __DIR__ . '/application');
+exec('php ' . __DIR__ . '/vendor/irontec/Generator/klear-yaml-generator.php -a ' . __DIR__ . '/application');
