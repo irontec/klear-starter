@@ -68,6 +68,6 @@ if ($mysqli->query($klearUsers)) {
     echo "Fallo la creación de KlearUsers \n";
 }
 
-exec('php ' . __DIR__ . '/vendor/irontec/Generator/klear-models-mappers-generator.php -a ' . __DIR__ . '/application');
-exec('php ' . __DIR__ . '/vendor/irontec/Generator/klear-db-generator.php -a ' . __DIR__ . '/application');
-exec('php ' . __DIR__ . '/vendor/irontec/Generator/klear-yaml-generator.php -a ' . __DIR__ . '/application');
+exec('php ' . __DIR__ . '/../vendor/irontec/Generator/klear-models-mappers-generator.php -a ' . __DIR__ . '/../application');
+exec('php ' . __DIR__ . '/../vendor/irontec/Generator/klear-db-generator.php -a ' . __DIR__ . '/../application');
+exec('php ' . __DIR__ . '/../vendor/irontec/Generator/klear-yaml-generator.php -a ' . __DIR__ . '/../application');
