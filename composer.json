@@ -34,8 +34,8 @@
     },
     "scripts":{
         "post-create-project-cmd":[
-            "php cli/install.php",
-            "php vendor/irontec/Generator/klear-models-mappers-generator.php -a application"
+            "mkdir library storage application/cache; chmod 777 -R storage; chmod 777 -R application/cache",
+            "echo 'ahora entra a tu proyecto y ejecuta \n php cli/install.php \n php vendor/irontec/Generator/klear-models-mappers-generator.php -a application \n'"
         ]
     }
 }
