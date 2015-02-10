@@ -1,0 +1,40 @@
+{
+    "name":"SEOexamples",
+    "description":"",
+    "repositories": [
+        {
+            "type":"vcs",
+            "url":"https://github.com/irontec/klear"
+        },
+        {
+            "type":"vcs",
+            "url":"https://github.com/irontec/klearMatrix"
+        },
+        {
+            "type":"vcs",
+            "url":"https://github.com/irontec/klearGallery"
+        },
+        {
+            "type":"vcs",
+            "url":"https://github.com/irontec/klear-library"
+        },
+        {
+            "type":"vcs",
+            "url":"https://github.com/irontec/klear-generator"
+        }
+    ],
+    "require":{
+        "irontec/klear":"@dev",
+        "irontec/klearMatrix":"@dev",
+        "irontec/klearGallery":"@dev",
+        "irontec/Iron": "@dev"
+    },
+    "require-dev":{
+        "irontec/Generator":"@dev"
+    },
+    "scripts":{
+        "post-create-project-cmd" : [
+            "php cli/install.php"
+        ]
+    }
+}
