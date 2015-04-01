@@ -11,11 +11,11 @@ defined('APPLICATION_ENV')
 
 /** Composer autoloader */
 if (
-        file_exists(
-                realpath(
-                        APPLICATION_PATH . '/../library/vendor/autoload.php'
-                )
+    file_exists(
+        realpath(
+            APPLICATION_PATH . '/../library/vendor/autoload.php'
         )
+    )
 ) {
 
     require_once realpath(APPLICATION_PATH . '/../library/vendor/autoload.php');
@@ -23,10 +23,15 @@ if (
 }
 
 // Ensure library/ is on include_path
-set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(APPLICATION_PATH . '/../library'),
-    get_include_path()
-)));
+set_include_path(
+    implode(
+        PATH_SEPARATOR,
+        array(
+            realpath(APPLICATION_PATH . '/../library'),
+        get_include_path()
+        )
+    )
+);
 
 /** Zend_Application */
 require_once 'Zend/Application.php';

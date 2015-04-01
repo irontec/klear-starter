@@ -1,6 +1,6 @@
 {
     "name":"irontec/klear-starter",
-    "description":"",
+    "description":"Generador de proyectos con klear en Zend Framework ",
     "repositories":[
         {
             "type":"vcs",
@@ -34,10 +34,13 @@
     },
     "scripts":{
         "post-create-project-cmd":[
-            "mkdir library storage application/cache",
-            "chmod 777 -R storage",
-            "chmod 777 -R application/cache",
-            "echo 'ahora entra a tu proyecto y ejecuta \n php cli/install.php'"
+            "mkdir web/library web/storage web/application/cache",
+            "chmod 777 -R web/storage",
+            "chmod 777 -R web/application/cache",
+            "\n\n echo 'ahora entra a tu proyecto y ejecuta \n php web/cli/install.php'"
         ]
+    },
+    "config":{
+        "vendor-dir":"web/vendor"
     }
 }
