@@ -160,23 +160,30 @@ class install
     protected function _insertMysql()
     {
 
-        // Temporary variable, used to store current query
         $templine = '';
-        // Read in entire file
         $lines = file(__DIR__ . '/../../phing/deltas/001-init.sql');
-        // Loop through each line
         foreach ($lines as $line) {
-            // Skip it if it's a comment
-            if (substr($line, 0, 2) == '--' || $line == '')
+            if (substr($line, 0, 2) == '--' || $line == '') {
                 continue;
+            }
 
-            // Add this line to the current segment
             $templine .= $line;
-            // If it has a semicolon at the end, it's the end of the query
             if (substr(trim($line), -1, 1) == ';') {
-                // Perform the query
                 $this->_mysqli->query($templine);
-                // Reset temp variable to empty
+                $templine = '';
+            }
+        }
+
+        $templine = '';
+        $lines = file(__DIR__ . '/../../phing/dumps/changelog.sql');
+        foreach ($lines as $line) {
+            if (substr($line, 0, 2) == '--' || $line == '') {
+                continue;
+            }
+
+            $templine .= $line;
+            if (substr(trim($line), -1, 1) == ';') {
+                $this->_mysqli->query($templine);
                 $templine = '';
             }
         }
