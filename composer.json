@@ -1,6 +1,7 @@
 {
     "name":"irontec/klear-starter",
     "description":"Generador de proyectos con klear en Zend Framework ",
+    "license": "EUPL",
     "repositories":[
         {
             "type":"vcs",
