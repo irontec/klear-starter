@@ -1,0 +1,6 @@
+mappers: 
+  - &KlearRoles {mapper: \{appnamespace}\Mapper\Sql\KlearRoles, modelFile: KlearRoles}
+  - &KlearRolesSections {mapper: \{appnamespace}\Mapper\Sql\KlearRolesSections, modelFile: KlearRolesSections}
+  - &KlearSections {mapper: \{appnamespace}\Mapper\Sql\KlearSections, modelFile: KlearSections}
+  - &KlearUsers {mapper: \{appnamespace}\Mapper\Sql\KlearUsers, modelFile: KlearUsers}
+  - &KlearUsersRoles {mapper: \{appnamespace}\Mapper\Sql\KlearUsersRoles, modelFile: KlearUsersRoles}

@@ -1,0 +1,48 @@
+#include conf.d/mapperList.yaml
+#include conf.d/actions.yaml
+
+production: 
+  main: 
+    module: klearMatrix
+    defaultScreen: klearSectionsList_screen
+
+  screens: 
+    klearSectionsList_screen: &klearSectionsList_screenLink 
+      controller: list
+      pagination: 
+        items: 25
+      <<: *KlearSections
+      title: _("List of %s %2s", ngettext('Sección de Klear', 'Secciones de Klear', 0), "[format| (%parent%)]")
+      fields: 
+        options: 
+          title: _("Options")
+          screens: 
+            klearSectionsEdit_screen: true
+          default: klearSectionsEdit_screen
+      options: 
+        title: _("Options")
+
+    klearSectionsEdit_screen: &klearSectionsEdit_screenLink 
+      <<: *KlearSections
+      controller: edit
+      class: ui-silk-brick-edit
+      fullWidth: true
+      label: false
+      title: _("Edit %s %2s", ngettext('Sección de Klear', 'Secciones de Klear', 1), "[format| (%item%)]")
+      fields:
+        blacklist:
+          identifier: true
+      fixedPositions:
+        group:
+          label: _('Sección');
+          colsPerRow: 4
+          fields:
+            name: 2
+            description: 2
+
+testing: 
+  _extends: production
+staging: 
+  _extends: production
+development: 
+  _extends: production

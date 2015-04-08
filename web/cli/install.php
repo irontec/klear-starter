@@ -31,6 +31,11 @@ class install
         $this->_logSuccess('Ejecutando Generadores');
         $this->_RunGeneratos($isRestApp);
 
+        $this->_logSuccess(
+            'Creando archivos restantes para el Auth y los Roles'
+        );
+        $this->_generateAuthRoles($namespace);
+
         $this->_messageEnd();
 
     }
@@ -142,7 +147,6 @@ class install
         $password = ($connectDB['pass'] == '' ? '12345' : $connectDB['pass']);
         $host = ($connectDB['host'] == '' ? 'localhost' : $connectDB['host']);
 
-
         $pathAppication = __DIR__ . '/../application/configs/application.ini';
 
         $application = file_get_contents($pathAppication);
@@ -205,6 +209,96 @@ class install
         if ($isRestApp) {
             exec('php ' . $pathGenerators . '/klear-rest-generator.php -a ' . $pathApplication);
         }
+
+    }
+
+    protected function _generateAuthRoles($namespace)
+    {
+
+        $libradyApp = __DIR__ . '/../library/' . $namespace;
+
+        $this->_replaceData(
+            __DIR__ . '/KlearSections.php',
+            $libradyApp . '/Mapper/Sql/KlearSections.php',
+            '{appnamespace}',
+            $namespace
+        );
+
+        $authApp = __DIR__ . '/Auth';
+        $authNewApp = __DIR__ . '/../library/' . $namespace . '/Auth';
+
+        $this->_xcopy($authApp, $authNewApp);
+
+        $klearConf = __DIR__ . '/../application/configs/klear/';
+
+        $filesChangeAppnamespace = array(
+            $authNewApp . '/Users.php',
+            $authNewApp . '/Adapter.php',
+            $authNewApp . '/Model/User.php',
+            $klearConf . 'conf.d/mapperList.yaml',
+            $klearConf . 'model/KlearRoles.yaml',
+            $klearConf . 'model/KlearRolesSections.yaml',
+            $klearConf . 'model/KlearSections.yaml',
+            $klearConf . 'model/KlearUsers.yaml',
+            $klearConf . 'model/KlearUsersRoles.yaml',
+            $klearConf . 'klear.yaml'
+        );
+
+        foreach ($filesChangeAppnamespace as $file) {
+            $this->_replaceData($file, $file, '{appnamespace}', $namespace);
+        }
+
+    }
+
+    /**
+     * Copy a file, or recursively copy a folder and its contents
+     * @param       string   $source    Source path
+     * @param       string   $dest      Destination path
+     * @param       string   $permissions New folder creation permissions
+     * @return      bool     Returns true on success, false on failure
+     */
+    protected function _xcopy($source, $dest, $permissions = 0755)
+    {
+        // Check for symlinks
+        if (is_link($source)) {
+            return symlink(readlink($source), $dest);
+        }
+
+        // Simple copy for a file
+        if (is_file($source)) {
+            return copy($source, $dest);
+        }
+
+        // Make destination directory
+        if (!is_dir($dest)) {
+            mkdir($dest, $permissions);
+        }
+
+        // Loop through the folder
+        $dir = dir($source);
+        while (false !== $entry = $dir->read()) {
+            // Skip pointers
+            if ($entry == '.' || $entry == '..') {
+                continue;
+            }
+
+            // Deep copy directories
+            $this->_xcopy("$source/$entry", "$dest/$entry", $permissions);
+        }
+
+        // Clean up
+        $dir->close();
+        return true;
+    }
+
+    protected function _replaceData($source, $dest, $shortCode, $data)
+    {
+
+        $infoReplace = file_get_contents($source);
+
+        $infoReplace = str_replace($shortCode, $data, $infoReplace);
+
+        file_put_contents($dest, $infoReplace);
 
     }
 

@@ -1,0 +1,62 @@
+production: 
+    main: 
+      log: 
+        writerName: syslog
+        writerParams: 
+          application: {appnamespace}
+      sitename: {appnamespace}
+      sitesubname: Bienvenido ${auth.fullName}
+      logo: klear/images/klear.png
+      year: 2015
+      lang: es
+      langs: 
+        es: 
+          title: Español
+          language: es
+          locale: es_ES
+      jqueryUI:
+        theme: pepper-grinder
+      auth:
+       userMapper: {appnamespace}_Auth_Users
+       adapter: {appnamespace}_Auth_Adapter
+       title: _("Access denied")
+       description: _("Insert your username")
+       session:
+         name: {appnamespace}
+         disableChangeName: false
+      timezone: Europe/Madrid
+    menu: 
+      
+      Klear: 
+        title: _("Configuración")
+        description: _("Configuración")
+        submenus:
+          KlearUsersList: 
+            title: ngettext('Usuario de Klear', 'Usuarios de Klear', 0)
+            class: ui-silk-vcard
+            description: _("List of %s", ngettext('Usuario de Klear', 'Usuarios de Klear', 0))
+          KlearRolesList: 
+            title: ngettext('Rol', 'Roles', 0)
+            class: ui-silk-vcard-delete
+            description: _("List of %s", ngettext('Rol', 'Roles', 0))
+          KlearSectionsList: 
+            title: ngettext('Sección de Klear', 'Secciones de Klear', 0)
+            class: ui-silk-brick
+            description: _("List of %s", ngettext('Sección', 'Secciones', 0))
+    
+    footerMenu:
+      footer:
+        title: ""
+        submenus: 
+          Dashboard:
+            default: true
+            title: _("Panel de control")
+            class: ui-silk-bricks
+            description: _("Vista general de todas las entidades")
+
+staging: 
+  _extends: production
+testing: 
+  _extends: production
+development: 
+  _extends: production
