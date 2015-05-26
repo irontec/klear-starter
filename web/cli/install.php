@@ -20,7 +20,6 @@ class install
 
         $namespace = $this->_getNamespace();
         $connectDB = $this->_getConnectDB();
-        $isRestApp = false;//$this->_getIsRestApp();
 
         $this->_logSuccess('Generando application.ini');
         $this->_ApplicationIni($namespace, $connectDB);
@@ -29,7 +28,7 @@ class install
         $this->_insertMysql();
 
         $this->_logSuccess('Ejecutando Generadores');
-        $this->_RunGeneratos($isRestApp);
+        $this->_RunGeneratos();
 
         $this->_logSuccess(
             'Creando archivos restantes para el Auth y los Roles'
@@ -124,21 +123,6 @@ class install
 
     }
 
-    protected function _getIsRestApp()
-    {
-
-        $isRest = readline('Es una api rest (y/n): ');
-
-        while ($isRest == '' || !in_array($isRest, array('y', 'n'))) {
-            if (!in_array($isRest, array('y', 'n'))) {
-                $isRest = readline("Es una api rest (y/n): ");
-            }
-        }
-
-        return ($isRest == 'y' ? true : false);
-
-    }
-
     protected function _ApplicationIni($namespace, $connectDB)
     {
 
@@ -196,19 +180,15 @@ class install
 
     }
 
-    protected function _RunGeneratos($isRestApp)
+    protected function _RunGeneratos()
     {
 
         $pathApplication = __DIR__ . '/../application';
-        $pathGenerators = __DIR__ . '/../vendor/irontec/Generator';
+        $pathGenerators = __DIR__ . '/../klear/generator';
 
         exec('php ' . $pathGenerators . '/klear-models-mappers-generator.php -a ' . $pathApplication);
         exec('php ' . $pathGenerators . '/klear-db-generator.php -a ' . $pathApplication);
         exec('php ' . $pathGenerators . '/klear-yaml-generator.php -a ' . $pathApplication);
-
-        if ($isRestApp) {
-            exec('php ' . $pathGenerators . '/klear-rest-generator.php -a ' . $pathApplication);
-        }
 
     }
 
@@ -309,8 +289,10 @@ class install
             '',
             ' ****************************************',
             '  Autogenerador para datos de inicio.',
-            '  Antes de empezar es necesario tener:',
-            '  * Usuario, contraseña de MySQL junto a una Base de datos creada',
+            '  Antes de empezar es necesario tener los siguientes datos de MySQL:',
+            '  * Usuario',
+            '  * Contraseña',
+            '  * Base de datos',
             ''
         );
 
