@@ -78,3 +78,11 @@ INSERT INTO `KlearRolesSections` VALUES (1, 1, 1);
 INSERT INTO `KlearRolesSections` VALUES (2, 1, 2);
 INSERT INTO `KlearRolesSections` VALUES (3, 1, 3);
 UNLOCK TABLES;
+
+CREATE TABLE `EtagVersions` (
+    `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+    `table` varchar(55) DEFAULT NULL,
+    `etag` varchar(255),
+    `lastChange` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
