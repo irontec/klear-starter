@@ -26,7 +26,7 @@
     <configParser targetProperty="resources.db.params.dbname" outputProperty="db.name" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
     <configParser targetProperty="resources.db.params.username" outputProperty="db.user" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
     <configParser targetProperty="resources.db.params.password" outputProperty="db.pass" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
-    <configParser targetProperty="resources.db.params.hostname" outputProperty="db.host" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
+    <configParser targetProperty="resources.db.params.host" outputProperty="db.host" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
     
     <!-- Crea la tabla inicial de changelog -->
     <target name="init">
