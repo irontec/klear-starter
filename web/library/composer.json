@@ -1,0 +1,21 @@
+{
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/irontec/mustache"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/irontec/phpwee-php-minifier"
+        },
+        {
+            "type":"vcs",
+            "url": "https://github.com/irontec/php-apidoc"
+        }
+    ],
+    "require": {
+        "irontec/phpwee-php-minifier": "dev-master",
+        "irontec/mustache": "dev-master",
+        "irontec/php-apidoc": "dev-master"
+    }
+}
