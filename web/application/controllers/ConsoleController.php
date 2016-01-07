@@ -5,7 +5,6 @@ class ConsoleController extends Zend_Controller_Action
 
     /**
      * Hace una comprobación de que se esta ejecutando desde consola
-     * Carga el sistema de logs
      * @see Zend_Controller_Action::init()
      */
     public function init()

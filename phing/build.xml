@@ -23,14 +23,15 @@
     
     <taskdef name="configParser" classname="ConfigurationParser" />
     
-    <configParser targetProperty="resources.db.params.dbname" outputProperty="db.name" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
+    <configParser targetProperty="resources.db.params.dbname"   outputProperty="db.name" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
     <configParser targetProperty="resources.db.params.username" outputProperty="db.user" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
     <configParser targetProperty="resources.db.params.password" outputProperty="db.pass" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
-    <configParser targetProperty="resources.db.params.host" outputProperty="db.host" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
+    <configParser targetProperty="resources.db.params.host"     outputProperty="db.host" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
+    <configParser targetProperty="resources.db.params.port"     outputProperty="db.port" iniFile="${env.PWD}/${application.path}/configs/application.ini" stage="${application.env}" />
     
     <!-- Crea la tabla inicial de changelog -->
     <target name="init">
-        <exec command="${progs.mysql} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; predeploy.sql" dir="${build.dir}" checkreturn="true" />
+        <exec command="${progs.mysql} -h${db.host} -u${db.user} -p${db.pass} --port=${db.port} ${db.name} &lt; predeploy.sql" dir="${build.dir}" checkreturn="true" />
     </target>
     
     <target name="first-pass-migrate" description="Database Migrations">
@@ -40,9 +41,9 @@
         <property name="build.dbdeploy.deployfile" value="deploy/scripts/deploy-${DSTAMP}${TSTAMP}.sql" />
         <property name="build.dbdeploy.undofile" value="deploy/scripts/undo-${DSTAMP}${TSTAMP}.sql" />
         <!-- generate the deployment scripts -->
-        <dbdeploy url="mysql:host=${db.host};dbname=${db.name}" userid="${db.user}" password="${db.pass}" dir="${build.dir}/deltas" outputfile="${build.dir}/${build.dbdeploy.deployfile}" undooutputfile="${build.dir}/${build.dbdeploy.undofile}" />
+        <dbdeploy url="mysql:host=${db.host};dbname=${db.name};port=${db.port}" userid="${db.user}" password="${db.pass}" dir="${build.dir}/deltas" outputfile="${build.dir}/${build.dbdeploy.deployfile}" undooutputfile="${build.dir}/${build.dbdeploy.undofile}" />
         <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
-        <exec command="${progs.mysql} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${build.dbdeploy.deployfile}" dir="${build.dir}"/>
+        <exec command="${progs.mysql} -h${db.host} -u${db.user} -p${db.pass} --port=${db.port} ${db.name} &lt; ${build.dbdeploy.deployfile}" dir="${build.dir}"/>
     </target>
     
     <target name="second-pass-migrate" description="Database Migrations">
@@ -54,7 +55,7 @@
         <!-- generate the deployment scripts -->
         <dbdeploy url="mysql:host=${db.host};dbname=${db.name}" userid="${db.user}" password="${db.pass}" dir="${build.dir}/deltas" outputfile="${build.dir}/${build.dbdeploy.deployfile}" undooutputfile="${build.dir}/${build.dbdeploy.undofile}" />
         <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
-        <exec command="${progs.mysql} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${build.dbdeploy.deployfile}" dir="${build.dir}" />
+        <exec command="${progs.mysql} -h${db.host} -u${db.user} -p${db.pass} --port=${db.port} ${db.name} &lt; ${build.dbdeploy.deployfile}" dir="${build.dir}" />
     </target>
     
     <!-- Crea deltas con los cambios en MySQL segun los comentarios de tabla/columna -->
@@ -82,21 +83,21 @@
     <!-- Crea una dump completo de la base de datos -->
     <target name="generate-dump">
         <property name="build.dump.dumpFile" value="${build.dir}/dumps/${db.name}-${DSTAMP}-${TSTAMP}.sql" />
-        <exec command="mysqldump -h${db.host} -u${db.user} -p${db.pass} ${db.name} &gt; ${build.dump.dumpFile}" dir="${build.dir}" checkreturn="true" passthru="true"/>
+        <exec command="mysqldump -h${db.host} -u${db.user} -p${db.pass} --port=${db.port} ${db.name} &gt; ${build.dump.dumpFile}" dir="${build.dir}" checkreturn="true" passthru="true"/>
         <exec command="echo 'Creado el dump ${db.name}-${DSTAMP}-${TSTAMP}.sql'" dir="${build.dir}" checkreturn="true" passthru="true" />
     </target>
     
     <!-- Crea un dump de los create tables -->
     <target name="generate-dump-schema">
         <property name="build.dumpSchema.dumpFile" value="${build.dir}/dumps/${db.name}-schema-${DSTAMP}-${TSTAMP}.sql" />
-        <exec command="mysqldump -d --add-drop-database -h${db.host} -u${db.user} -p${db.pass} --databases ${db.name} | sed 's/ AUTO_INCREMENT=[0-9]*//g' &gt; ${build.dumpSchema.dumpFile}" dir="${build.dir}" checkreturn="true" passthru="true"/>
+        <exec command="mysqldump -d --add-drop-database -h${db.host} -u${db.user} -p${db.pass} --port=${db.port} --databases ${db.name} | sed 's/ AUTO_INCREMENT=[0-9]*//g' &gt; ${build.dumpSchema.dumpFile}" dir="${build.dir}" checkreturn="true" passthru="true"/>
         <exec command="echo 'Creado el schema ${db.name}-schema-${DSTAMP}-${TSTAMP}.sql'" dir="${build.dir}" checkreturn="true" passthru="true" />
     </target>
     
     <!-- Crea un dump con solo la información de inserts -->
     <target name="generate-dump-data">
         <property name="build.dumpData.dumpFile" value="${build.dir}/dumps/${db.name}-data-${DSTAMP}-${TSTAMP}.sql" />
-        <exec command="mysqldump --no-create-info -h${db.host} -u${db.user} -p${db.pass} --databases ${db.name} &gt; ${build.dumpData.dumpFile} " dir="${build.dir}" checkreturn="true" passthru="true"/>
+        <exec command="mysqldump --no-create-info -h${db.host} -u${db.user} -p${db.pass} --port=${db.port} --databases ${db.name} &gt; ${build.dumpData.dumpFile} " dir="${build.dir}" checkreturn="true" passthru="true"/>
         <exec command="echo 'Creado el data ${db.name}-data-${DSTAMP}-${TSTAMP}.sql'" dir="${build.dir}" checkreturn="true" passthru="true" />
     </target>
     

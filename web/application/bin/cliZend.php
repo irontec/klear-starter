@@ -7,6 +7,14 @@ define('APPLICATION_PATH', realpath(__DIR__ . '/../../application'));
 
 require_once 'Zend/Loader/Autoloader.php';
 
+/**
+ * Composer autoloader
+ */
+$autoLoad = APPLICATION_PATH . '/../library/vendor/autoload.php';
+if (file_exists(realpath($autoLoad))) {
+    require_once realpath($autoLoad);
+}
+
 $loader = Zend_Loader_Autoloader::getInstance();
 
 $formatOf = "module/controller/action/param1/param2/param3/..";
@@ -41,10 +49,14 @@ if ($getopt->getOption('h') || !$getopt->getOption('a')) {
  * Initialize values based on presence or absence of CLI options
  */
 $env = $getopt->getOption('e');
+if (!$env) {
+    $env = getenv('APPLICATION_ENV');
+    if (!$env) {
+        $env = 'production';
+    }
+}
 
-defined('APPLICATION_ENV') || define(
-    'APPLICATION_ENV', (null === $env) ? 'production' : $env
-);
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', $env);
 
 /**
  * initialize Zend_Application
@@ -55,6 +67,7 @@ $application = new Zend_Application(
 );
 
 $loader->registerNamespace('Iron_');
+
 /**
  * Bootstrap and retrive the frontController resource
  */
