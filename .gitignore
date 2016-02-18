@@ -1,2 +1,6 @@
+!.gitignore
 web/application/cache/*
 web/vendor/*
+.buildpath
+.project
+.settings/
