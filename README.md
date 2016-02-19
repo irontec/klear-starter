@@ -36,6 +36,7 @@ Si todo se ejecuta correctamente queda funcionando una web limpia y un klear, co
 * php-apc
 * php-pear
 * php5-dev
+* php5-readline
 
 * pecl install yaml
 
