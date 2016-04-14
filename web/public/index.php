@@ -1,9 +1,11 @@
 <?php
 
+$baseDir = realpath(__DIR__ . '/../');
+
 /**
  * Define path to application directory
  */
-$applicationPath = realpath(dirname(__FILE__) . '/../application');
+$applicationPath = $baseDir . '/application';
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', $applicationPath);
 
 /**
@@ -15,21 +17,22 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', $env);
 /**
  * Composer autoloader
  */
-$autoLoad = APPLICATION_PATH . '/../library/vendor/autoload.php';
-if (file_exists(realpath($autoLoad))) {
-    require_once realpath($autoLoad);
+$vendorDir = $baseDir . '/vendor/';
+if (file_exists($vendorDir)) {
+    require_once $vendorDir . 'autoload.php';
 }
 
 /**
  * Ensure library/ is on include_path
  */
-$library = realpath(APPLICATION_PATH . '/../library');
+$library = $baseDir . '/library';
+$zendAutoload = $vendorDir . 'zendframework/zendframework1/library';
 set_include_path(
     implode(
         PATH_SEPARATOR,
         array(
             $library,
-            get_include_path()
+            $zendAutoload
         )
     )
 );
@@ -40,7 +43,7 @@ require_once 'Zend/Application.php';
 /**
  * Create application, bootstrap, and run
  */
-$application = new Zend_Application(
+$application = new \Zend_Application(
     APPLICATION_ENV,
     APPLICATION_PATH . '/configs/application.ini'
 );
