@@ -27,7 +27,7 @@
             "url": "https://github.com/irontec/klearMatrix"
         },
         {
-            "type":"path",
+            "type":"vcs",
             "url": "https://github.com/irontec/klear-generator"
         }
     ],
