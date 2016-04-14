@@ -5,11 +5,6 @@
     "scripts":{
         "post-create-project-cmd":[
             "mkdir web/storage web/application/cache",
-            "mkdir web/klear",
-            "git clone https://github.com/irontec/klear-generator web/klear/generator",
-            "git clone https://github.com/irontec/klear-library web/klear/library/Iron",
-            "git clone https://github.com/irontec/klear web/klear/modules/klear",
-            "git clone https://github.com/irontec/klearMatrix web/klear/modules/klearMatrix",
             "chmod 777 -R web/storage",
             "chmod 777 -R web/application/cache",
             "\n\n echo 'ahora entra a tu proyecto y ejecuta \n php web/cli/install.php'"
@@ -17,5 +12,31 @@
     },
     "config":{
         "vendor-dir":"web/vendor"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/irontec/klear-library"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/irontec/klear"
+        },
+        {
+            "type":"vcs",
+            "url": "https://github.com/irontec/klearMatrix"
+        },
+        {
+            "type":"path",
+            "url": "https://github.com/irontec/klear-generator"
+        }
+    ],
+    "require": {
+        "irontec/klearMatrix": "dev-chloe",
+        "irontec/Iron": "dev-chloe",
+        "irontec/klear": "dev-chloe",
+        "irontec/Generator": "dev-chloe",
+        "zendframework/zendframework1": "dev-master",
+        "phing/phing": "2.*"
     }
 }
