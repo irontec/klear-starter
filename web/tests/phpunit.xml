@@ -1,17 +1,30 @@
-<phpunit bootstrap="./bootstrap.php">
+<phpunit
+    bootstrap="./bootstrap.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true">
+
     <testsuite name="Application Test Suite">
         <directory>./application</directory>
     </testsuite>
     <testsuite name="Library Test Suite">
         <directory>./library</directory>
     </testsuite>
-    
+
     <filter>
         <!-- If Zend Framework is inside your project's library, uncomment this filter -->
-        <!-- 
-        <whitelist>
-            <directory suffix=".php">../../library/Zend</directory>
-        </whitelist>
-        -->
+        <!--
+        <blacklist>
+            <directory suffix=".php">/usr/share/php/Zend</directory>
+        </blacklist>
+         -->
     </filter>
+
+    <!-- 
+    <logging>
+        <log type="coverage-html" target="../public/log/report" charset="UTF-8" yui="true" highlight="true" lowUpperBound="50" highLowerBound="80" showUncoveredFiles="true"/>
+        <log type="testdox-html" target="../public/log/testdox.html" />
+    </logging>
+     -->
 </phpunit>
