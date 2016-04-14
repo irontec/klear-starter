@@ -184,7 +184,7 @@ class install
     {
 
         $pathApplication = __DIR__ . '/../application';
-        $pathGenerators = __DIR__ . '/../klear/generator';
+        $pathGenerators = __DIR__ . '/../vendor/bin';
 
         exec('php ' . $pathGenerators . '/klear-models-mappers-generator.php -a ' . $pathApplication);
         exec('php ' . $pathGenerators . '/klear-db-generator.php -a ' . $pathApplication);
