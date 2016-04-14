@@ -7,7 +7,7 @@ CREATE TABLE `KlearRoles` (
     `identifier` varchar(255) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `identifier` (`identifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='[entity]';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='[entity]';
 
 LOCK TABLES `KlearRoles` WRITE;
 INSERT INTO `KlearRoles` VALUES (1,'Administrador','Usuario con permisos de administrador','admin'),(2,'Usuario','Con roles para un usuario normal con restricciones.','user');
@@ -24,7 +24,6 @@ CREATE TABLE `KlearSections` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='[entity]';
 
 DROP TABLE IF EXISTS `KlearRolesSections`;
-
 CREATE TABLE `KlearRolesSections` (
     `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     `klearRoleId` mediumint(8) unsigned NOT NULL,
@@ -32,8 +31,8 @@ CREATE TABLE `KlearRolesSections` (
     PRIMARY KEY (`id`),
     KEY `klearRoleId` (`klearRoleId`),
     KEY `klearSectionId` (`klearSectionId`),
-    CONSTRAINT `KlearRolesSections_ibfk_1` FOREIGN KEY (`klearRoleId`) REFERENCES `KlearRoles` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `KlearRolesSections_ibfk_2` FOREIGN KEY (`klearSectionId`) REFERENCES `KlearSections` (`id`) ON DELETE CASCADE
+    CONSTRAINT `RolesSections_Roles` FOREIGN KEY (`klearRoleId`) REFERENCES `KlearRoles` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `RolesSections_Sections` FOREIGN KEY (`klearSectionId`) REFERENCES `KlearSections` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='[entity]';
 
 DROP TABLE IF EXISTS `KlearUsers`;
@@ -49,7 +48,10 @@ CREATE TABLE `KlearUsers` (
     UNIQUE KEY `login` (`login`),
     UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='[entity]';
+
+LOCK TABLES `KlearUsers` WRITE;
 INSERT INTO KlearUsers (login, pass, active, fullName) VALUES ('admin','$2a$08$0hHHBX8So9JhU0a0SNnRCeAZcMEdAfn7T/pl/u/pESzBwztldhRnO', 1, 'Administrador');
+UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `KlearUsersRoles`;
 CREATE TABLE `KlearUsersRoles` (
@@ -59,9 +61,9 @@ CREATE TABLE `KlearUsersRoles` (
     PRIMARY KEY (`id`),
     KEY `klearUserId` (`klearUserId`),
     KEY `klearRoleId` (`klearRoleId`),
-    CONSTRAINT `KlearUsersRoles_ibfk_1` FOREIGN KEY (`klearUserId`) REFERENCES `KlearUsers` (`userId`) ON DELETE CASCADE,
-    CONSTRAINT `KlearUsersRoles_ibfk_2` FOREIGN KEY (`klearRoleId`) REFERENCES `KlearRoles` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='[entity]';
+    CONSTRAINT `UsersRoles_Users` FOREIGN KEY (`klearUserId`) REFERENCES `KlearUsers` (`userId`) ON DELETE CASCADE,
+    CONSTRAINT `UsersRoles_Roles` FOREIGN KEY (`klearRoleId`) REFERENCES `KlearRoles` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='[entity]';
 
 LOCK TABLES `KlearUsersRoles` WRITE;
 INSERT INTO `KlearUsersRoles` VALUES (1,1,1);
@@ -78,11 +80,3 @@ INSERT INTO `KlearRolesSections` VALUES (1, 1, 1);
 INSERT INTO `KlearRolesSections` VALUES (2, 1, 2);
 INSERT INTO `KlearRolesSections` VALUES (3, 1, 3);
 UNLOCK TABLES;
-
-CREATE TABLE `EtagVersions` (
-    `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-    `table` varchar(55) DEFAULT NULL,
-    `etag` varchar(255),
-    `lastChange` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;

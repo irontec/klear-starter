@@ -6,4 +6,4 @@ else
     BASEDIR=`dirname $PWD/$0`  # Relative
 fi
 
-/usr/bin/php ${BASEDIR}/../web/vendor/phing/phing/bin/phing.php $1 -De=development -Dk=/opt/klear -Da=../web/application
+/usr/bin/php ${BASEDIR}/../web/vendor/phing/phing/bin/phing.php migrate -De=production -Dk=/opt/klear -Da=../web/application
