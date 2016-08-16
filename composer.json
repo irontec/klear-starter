@@ -36,7 +36,7 @@
         "irontec/Iron": "dev-chloe",
         "irontec/klear": "dev-chloe",
         "irontec/Generator": "dev-chloe",
-        "zendframework/zendframework1": "dev-master",
+        "zendframework/zendframework1": "1.12.*",
         "phing/phing": "2.*"
     }
 }
